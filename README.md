@@ -1,6 +1,6 @@
 # Memory Game
 
-This javascript project undertaken as part of Assignment 1 for ELEE1159 Web Systems Engineering. 
+This javascript project undertaken as part of Assignment 1 for Web Systems Engineering. 
 Below are the instructions to run the project and the automatic testing suites that its bundled with.
 
 I've put a lot of care and attention into the design of the website from validation to protecting the user from themselves. For example, the cards are not clickable after they've been matched so you can't match more cards than should be possible.
