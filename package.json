@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "test": "NODE_NO_WARNINGS=1 jest"
+  },
+  "dependencies": {
+    "jest": "^29.7.0",
+    "jsdom": "^25.0.1"
+  },
+  "devDependencies": {
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}

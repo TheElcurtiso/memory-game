@@ -1,0 +1,229 @@
+/*
+    Name: 
+    Banner ID:
+    Course: ELEE1159
+*/
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    width: 750px;
+    margin: 1em auto;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 1.5em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.confetti {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+}
+.confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #f2f2f2;
+    opacity: 0.8;
+    animation-name: confetti-fall;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes confetti-fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+#error_message {
+    margin-left: 10em;
+    margin-bottom: 1.5%;
+    color: #cc0033;
+}
+
+.error label {
+    color: #cc0033;
+  }
+
+.error input[type=text] {
+    background-color: #fce4e4;
+    border: 1px solid #cc0033;
+    outline: none;
+  }
+
+h1 {
+    font-size: 1.5em;
+    color: #4a90e2;
+    margin-bottom: 0.75em;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 1.5em;
+    text-align: center;
+}
+
+label {
+    float: left;
+    margin-top: 0.5%;
+    width: 10em;
+    font-weight: bold;
+    color: #333;
+}
+
+input, select {
+    width: calc(100% - 12em);
+    margin-bottom: 1.5%;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=checkbox] {
+    width: auto;
+}
+
+header p {
+    margin: 0 0 1em 0;
+    color: #555;
+    margin-right: 20px;
+}
+
+#cards {
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center;
+    align-items: center;
+}
+
+#cards img {
+    height: 100px;
+    width: 80px;
+    margin-right: 10px;
+    padding-bottom: 3px;
+    float: left;
+    border-radius: 8px;
+    filter: brightness(100%);
+}
+
+#cards img:hover {
+    filter: brightness(85%);
+    transform: scale(1.05);
+    transition: transform 0.3s, filter 0.3s;
+}
+
+.clear {
+    clear: both;
+}
+
+.hide {
+    display: none;
+}
+
+#info_container {
+    display: flex;
+    /* justify-content: flex-start; */
+    flex-direction: row;
+    align-items: center;
+}
+
+#new_game_button {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #4a90e2;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+#new_game_button:hover {
+    background-color: #357ab8;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+#new_game_button:active {
+    background-color: #2c5a8a;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.5); /* Increase size to 150% */
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes rainbow { 
+    0%{background-position:0% 50%}
+    50%{background-position:100% 25%}
+    100%{background-position:0% 50%}
+}
+
+.tabs {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #fafafa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tabs button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 12px 20px;
+    transition: background-color 0.3s;
+    font-size: 1em;
+    color: #666;
+}
+
+.tabs button:hover {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.tabs button.active {
+    background-color: #ccc;
+    color: #000;
+    font-weight: bold;
+}
+
+.tabcontent {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-top: none;
+    background-color: #fff;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#tabs_settings {
+    padding-top: 15px;
+}
+
+#win_text {
+    background-image: repeating-linear-gradient(45deg, violet, indigo, blue, green, yellow, orange, red, violet);
+    text-align: center;
+    background-size: 800% 800%;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 24px;
+    animation: rainbow 2s ease infinite, pulse 2s infinite ease-in-out;
+
+}
