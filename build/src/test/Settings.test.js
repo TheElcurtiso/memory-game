@@ -3,9 +3,11 @@
  */
 
 const Settings = require('../main/Settings');
+const CardGame = require('../main/CardGame');
 
 describe("CardAnimation", () => {
     const settings = new Settings();
+    const cardGame = new CardGame();
   
     test("Set name of player", () => {
         settings.setName("Curtis");
@@ -44,17 +46,20 @@ describe("CardAnimation", () => {
         const playerText = document.createElement("player");
         const highScoreText = document.createElement("high_score");
         const correctScoreText = document.createElement("correct_score");
+        const attempts = document.createElement("attempts");
 
         playerText.id = "player";
         highScoreText.id = "high_score";
         correctScoreText.id = "correct";
+        attempts.id = "attempts";
 
         document.body.appendChild(playerText);
         document.body.appendChild(highScoreText);
         document.body.appendChild(correctScoreText);
+        document.body.appendChild(attempts);
 
         settings.setName("Curtis");
-        settings.setDisplayData();
+        settings.setDisplayData(cardGame);
         expect(document.getElementById("player").innerHTML).toBe("Player: Curtis");
     });
 

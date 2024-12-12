@@ -1,5 +1,7 @@
+
+
 // Constants defining the card image height and the minimum number of cards
-const cardImageHeight = 103;
+const cardImageHeight = 130;
 const lowestNumberOfCards = 8;
 
 // Class responsible for managing the logic of a card matching game
@@ -11,6 +13,18 @@ class CardGame {
         this.cardImages = {}; // Object mapping card indexes to their images
         this.totalCounter = 0; // Counter for total attempts
         this.successfulCounter = 0; // Counter for successful matches
+    }
+
+    getSuccessfulCounter() {
+        return this.successfulCounter;
+    }
+
+    getTotalCounter() {
+        return this.totalCounter;
+    }
+
+    setTotalCounter(totalCounter) {
+        this.totalCounter = totalCounter;
     }
 
     // Sets up the cards for a new game
@@ -75,27 +89,30 @@ class CardGame {
                     if (currentScore > settings.getHighScore()) {
                         settings.setHighScore(currentScore);
                     }
-                    settings.setDisplayData(); // Update displayed data with new scores
+                    settings.setDisplayData(this); // Update displayed data with new scores
 
                     const cardNode = document.getElementById("cards");
                     cardNode.innerHTML = ""; // Clear card display
+                    cardNode.style = "display: flex; justify-content: center; align-items: center; margin: 1%; height: " + (this.displayCards.length / lowestNumberOfCards * cardImageHeight) + "px"
                     let winText = document.createElement("p");
                     winText.id = "win_text";
                     winText.innerText = "You Win!"; // Display win message
                     cardNode.appendChild(winText);
 
+                    clearInterval(settings.getCurrentTimer());
+
                     cardAnimation.createConfetti(); // Trigger confetti animation
                     resolve("The player has won!");
                 }
                 resolve("The player hasn't won yet.");
-            }, 4000); // Delay before checking win condition
+            }, cardAnimation.getAnimationSpeed() * 100 * 4); // Delay before checking win condition
         });
     }
 
     // Displays the first selected card
     showFirstCard(selectedCard, cardBox, cardAnimation) {
         // Start rotation animation
-        let rotateCard = setInterval(cardAnimation.rotate, 10, this.displayCards[selectedCard], cardAnimation);
+        let rotateCard = setInterval(cardAnimation.rotate, cardAnimation.getAnimationSpeed(), this.displayCards[selectedCard], cardAnimation);
 
         return new Promise((resolve, reject) => { 
             setTimeout(() => {
@@ -108,34 +125,37 @@ class CardGame {
                     clearInterval(rotateCard);
                     // Reset the rotation value
                     cardAnimation.setRotation(0);
+                    this.displayCards[selectedCard].style.transform = "rotateY(180deg)";
                     resolve("First card is shown!");
-                }, 1000); // Duration of the card reveal
-            }, 1000); // Delay before showing the card
+                }, cardAnimation.getAnimationSpeed() * 100); // Duration of the card reveal
+            }, cardAnimation.getAnimationSpeed() * 100); // Delay before showing the card
         });
     }
 
     // Displays the second selected card and checks for a match
-    showSecondCard(selectedCard, cardBox, timeoutBuffer, cardAnimation) {
+    showSecondCard(selectedCard, cardBox, timeoutBuffer, cardAnimation, settings) {
         // Start rotation animation
-        let rotateCard = setInterval(cardAnimation.rotate, 10, this.displayCards[selectedCard], cardAnimation);
+        let rotateCard = setInterval(cardAnimation.rotate, cardAnimation.getAnimationSpeed(), this.displayCards[selectedCard], cardAnimation);
 
         return new Promise((resolve, reject) => { 
             setTimeout(() => {
                 this.displayCards[selectedCard].src = this.cardImages[selectedCard];
                 setTimeout(() => { 
                     clearInterval(rotateCard);
+                    this.displayCards[selectedCard].style.transform = "rotateY(180deg)";
+                    settings.setDisplayData(this);
                     // Reset the selected cards if they don't match
                     cardAnimation.resetSelectedCards(cardBox, this.displayCards, timeoutBuffer, selectedCard, cardAnimation);
                     resolve("Second card is shown!");
-                }, 1000); // Duration of the card reveal
-            }, 1000); // Delay before showing the card
+                }, cardAnimation.getAnimationSpeed() * 100); // Duration of the card reveal
+            }, cardAnimation.getAnimationSpeed() * 100); // Delay before showing the card
         });
     }
 
     // Displays a matching card pair and starts the shrinking animation
-    showMatchingCard(selectedCard, cardBox, timeoutBuffer, cardAnimation) {
+    showMatchingCard(selectedCard, cardBox, timeoutBuffer, cardAnimation, settings) {
         // Start rotation animation
-        let rotateCard = setInterval(cardAnimation.rotate, 10, this.displayCards[selectedCard], cardAnimation);
+        let rotateCard = setInterval(cardAnimation.rotate, cardAnimation.getAnimationSpeed(), this.displayCards[selectedCard], cardAnimation);
 
         return new Promise((resolve, reject) => { 
             setTimeout(() => {
@@ -144,13 +164,16 @@ class CardGame {
                 setTimeout(() => {
                     // Stop the rotation animation
                     clearInterval(rotateCard);
+                    this.displayCards[selectedCard].style.transform = "rotateY(180deg)";
+                    this.displayCards[timeoutBuffer].style.transform = "rotateY(180deg)";
                     // Reset the rotation value
                     cardAnimation.setRotation(0);
+                    settings.setDisplayData(this);
                     // Start shrinking animation for matched cards
                     cardAnimation.startShrinking(cardBox, this.displayCards, timeoutBuffer, selectedCard, cardAnimation);
                     resolve("Cards are matching!");
-                }, 1000); // Duration of the card reveal
-            }, 1000); // Delay before showing the card
+                }, cardAnimation.getAnimationSpeed() * 100); // Duration of the card reveal
+            }, cardAnimation.getAnimationSpeed() * 100); // Delay before showing the card
         });
     }
 
@@ -173,7 +196,7 @@ class CardGame {
                 else if (this.randomCards[cardBuffer] == selectedCard && cardBuffer != selectedCard) {
                     cardBox.style.pointerEvents = "none"; // Disable card interactions
                     this.displayCards[selectedCard].style.pointerEvents = "none"; // Disable interaction for the selected card
-                    this.showMatchingCard(selectedCard, cardBox, timeoutBuffer, cardAnimation);
+                    this.showMatchingCard(selectedCard, cardBox, timeoutBuffer, cardAnimation, settings);
                     cardBuffer = -1; // Reset the buffer
                     this.successfulCounter++; // Increment successful match counter
                     this.totalCounter++; // Increment total attempts counter
@@ -183,7 +206,7 @@ class CardGame {
                 else if (this.randomCards[cardBuffer] != selectedCard && cardBuffer != selectedCard) {
                     cardBox.style.pointerEvents = "none"; // Disable card interactions
                     this.displayCards[selectedCard].style.pointerEvents = "none"; // Disable interaction for the selected card
-                    this.showSecondCard(selectedCard, cardBox, timeoutBuffer, cardAnimation);
+                    this.showSecondCard(selectedCard, cardBox, timeoutBuffer, cardAnimation, settings);
                     cardBuffer = -1; // Reset the buffer
                     this.totalCounter++; // Increment total attempts counter
                 }

@@ -37,16 +37,20 @@ describe("CardAnimation", () => {
         const playerText = document.createElement("player");
         const highScoreText = document.createElement("high_score");
         const correctScoreText = document.createElement("correct_score");
+        const attemptsText = document.createElement("attempts");
+
 
         cardNode.id = "cards";
         playerText.id = "player";
         highScoreText.id = "high_score";
         correctScoreText.id = "correct";
+        attemptsText.id = "attempts";
 
         document.body.appendChild(cardNode);
         document.body.appendChild(playerText);
         document.body.appendChild(highScoreText);
         document.body.appendChild(correctScoreText);
+        document.body.appendChild(attemptsText);
 
         const response = await cardGame.checkWinCondition(settings, cardAnimation);
         expect(response).toBe("The player has won!");
@@ -74,17 +78,22 @@ describe("CardAnimation", () => {
         let newImg = new Image;
         cardGame.displayCards = [newImg];
 
-        const response = await cardGame.showSecondCard(0, mockElement, 0, cardAnimation);
+        const response = await cardGame.showSecondCard(0, mockElement, 0, cardAnimation, settings);
         expect(response).toBe("Second card is shown!");
         expect(cardAnimation.currentRotation).toBeGreaterThanOrEqual(179);
     });
     test("Check cards are matching", async () => {
         const mockElement = document.createElement("div");
+        const timerElement = document.createElement("p");
+
+        timerElement.id = "timer";
+
+        document.body.append(timerElement);
 
         let newImg = new Image;
         cardGame.displayCards = [newImg];
 
-        const response = await cardGame.showMatchingCard(0, mockElement, 0, cardAnimation);
+        const response = await cardGame.showMatchingCard(0, mockElement, 0, cardAnimation, settings);
         expect(response).toBe("Cards are matching!");
         expect(cardAnimation.currentRotation).toBe(0);
     });

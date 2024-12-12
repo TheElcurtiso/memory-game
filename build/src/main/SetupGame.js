@@ -1,4 +1,7 @@
 "use strict"; // Enables strict mode, which catches common coding errors and improves performance
+
+
+
 // Utility function to get a DOM element by selector
 const getElement = selector => document.querySelector(selector);
 
@@ -13,7 +16,7 @@ let tabs = new Tabs();
 document.addEventListener("DOMContentLoaded", () => {
     // load settings data
     settings.loadData();
-    settings.setDisplayData();
+    settings.setDisplayData(cardGame);
 
     // display cards and player info
     cardGame.setupCards(displayImages, settings);

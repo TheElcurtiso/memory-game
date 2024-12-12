@@ -1,3 +1,5 @@
+
+
 // Class responsible for handling tab navigation functionality
 class Tabs {
 

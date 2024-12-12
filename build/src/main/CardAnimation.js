@@ -1,3 +1,5 @@
+
+
 // Image sources for card states
 const blankImgSrc = "images/blank.png"; // Image shown when the card is blank
 var backImgSrc = "images/back.png"; // Image shown when the card is face down
@@ -8,6 +10,11 @@ class CardAnimation {
         this.currentRotation = 0; // Current rotation degree of the card
         this.currentScale = 1; // Current scale factor of the card
         this.currentTransformStyle = ""; // Current CSS transform style applied to the card
+        this.animationSpeed = 7.5;
+    }
+
+    getAnimationSpeed() {
+        return this.animationSpeed;
     }
 
     // Set the rotation of a card
@@ -25,8 +32,8 @@ class CardAnimation {
         return new Promise((resolve, reject) => { 
             setTimeout(() => {
                 // Start shrinking the two matched cards
-                let shrinkFirstCard = setInterval(this.shrink, 20, displayCards[timeoutBuffer], cardAnimation);
-                let shrinkSecondCard = setInterval(this.shrink, 20, displayCards[selectedCard], cardAnimation);
+                let shrinkFirstCard = setInterval(this.shrink, this.animationSpeed * 2, displayCards[timeoutBuffer], cardAnimation);
+                let shrinkSecondCard = setInterval(this.shrink, this.animationSpeed * 2, displayCards[selectedCard], cardAnimation);
                 setTimeout(() => {
                     // Stop shrinking animation
                     clearInterval(shrinkFirstCard);
@@ -39,8 +46,8 @@ class CardAnimation {
                     // Enable interactions with all cards
                     cardBox.style.pointerEvents = "all";
                     resolve('Finished shrink animation');
-                }, 1000); // Duration of the shrinking animation
-            }, 1000); // Delay before starting the animation
+                }, this.animationSpeed * 100); // Duration of the shrinking animation
+            }, this.animationSpeed * 100); // Delay before starting the animation
         });
     }
     
@@ -49,8 +56,8 @@ class CardAnimation {
         return new Promise((resolve, reject) => { 
             setTimeout(() => {
                 // Start rotating the two unmatched cards back
-                let rotateFirstCardBack = setInterval(this.rotate, 20, displayCards[timeoutBuffer], cardAnimation);
-                let rotateSecondCardBack = setInterval(this.rotate, 20, displayCards[selectedCard], cardAnimation);
+                let rotateFirstCardBack = setInterval(this.rotate, this.animationSpeed * 2, displayCards[timeoutBuffer], cardAnimation);
+                let rotateSecondCardBack = setInterval(this.rotate, this.animationSpeed * 2, displayCards[selectedCard], cardAnimation);
                 setTimeout(() => {
                     // Change card images back to the initial back image
                     displayCards[timeoutBuffer].src = backImgSrc;
@@ -60,13 +67,13 @@ class CardAnimation {
                         clearInterval(rotateFirstCardBack);
                         clearInterval(rotateSecondCardBack);
                         // Re-enable card interactions
-                        displayCards[selectedCard].style.pointerEvents = "inherit";
-                        displayCards[timeoutBuffer].style.pointerEvents = "inherit";
+                        displayCards[selectedCard].style = "pointer-events: inherit";
+                        displayCards[timeoutBuffer].style = "pointer-events: inherit";
                         cardBox.style.pointerEvents = "all";
                         resolve('Finished rotation animation');
-                    }, 1000); // Duration of the rotation animation
-                }, 1000); // Delay before changing the image
-            }, 1000); // Delay before starting the rotation back
+                    }, this.animationSpeed * 100); // Duration of the rotation animation
+                }, this.animationSpeed * 100); // Delay before changing the image
+            }, this.animationSpeed * 100); // Delay before starting the rotation back
         });
     }  
     

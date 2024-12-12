@@ -1,3 +1,5 @@
+
+
 // Class responsible for managing game settings, including player data and scores
 class Settings {
 
@@ -6,6 +8,7 @@ class Settings {
         this.correctScore = 0; // Score based on correct matches
         this.highScore = 0; // Highest score achieved
         this.numberOfCards = 48; // Default number of cards in the game
+        this.currentTimer = null;
     }
 
     // Sets the player's name
@@ -43,6 +46,10 @@ class Settings {
         this.numberOfCards = numberOfCards;
     }
 
+    getCurrentTimer() {
+        return this.currentTimer;
+    }
+
     // Saves the player settings and updates the game state
     saveData() {
         document.getElementById("save_settings").addEventListener("click", () => {
@@ -56,9 +63,10 @@ class Settings {
 
                 this.setName(playerName); // Update the player's name
                 this.setNumberOfCards(document.getElementById("num_cards").value); // Update the number of cards
+                document.getElementById("cards").style = "display: grid; grid-template-columns: repeat(8, 1fr); grid-gap: 1em 1.5em; margin: 1%;";
                 // Update the display data and refresh game setup
-                this.setDisplayData();
                 cardGame.setupCards(displayImages, this);
+                this.setDisplayData(cardGame);
                 cardGame.makeCardsClickable();
             } else {
                 // Display an error message if the name validation fails
@@ -78,14 +86,39 @@ class Settings {
     }
 
     // Updates the display with the current player data and saves it to local storage
-    setDisplayData() {
+    setDisplayData(cardGame) {
         document.getElementById("player").innerHTML = "Player: " + this.playerName; // Display player name
         document.getElementById("high_score").innerHTML = "High Score: " + this.highScore + "%"; // Display high score
         document.getElementById("correct").innerHTML = "Correct: " + this.correctScore + "%"; // Display correct score
+        document.getElementById("attempts").innerHTML = "Attempts: " + cardGame.getSuccessfulCounter() + "/" + cardGame.getTotalCounter();
         localStorage.setItem("playerName", this.playerName); // Save player name to local storage
         localStorage.setItem("correctScore", this.correctScore); // Save correct score to local storage
         localStorage.setItem("highScore", this.highScore); // Save high score to local storage
         localStorage.setItem("numberOfCards", this.numberOfCards); // Save number of cards to local storage
+        if (cardGame.getTotalCounter() == 0) {
+            if (this.currentTimer != null) { clearInterval(this.currentTimer); }
+            this.startTimer();
+        }       
+    }
+
+    startTimer() {
+        let startTime = Date.now();
+
+        function updateTimer() {
+            let elapsedTime = Date.now() - startTime;
+            let minutes = Math.floor(elapsedTime / 60000);
+            let seconds = Math.floor((elapsedTime % 60000) / 1000);
+
+            // Format the time as MM:SS
+            let formattedTime = 
+                (minutes < 10 ? '0' : '') + minutes + ':' + 
+                (seconds < 10 ? '0' : '') + seconds;
+
+            document.getElementById('timer').innerText = 'Time: ' + formattedTime;
+        }
+
+        // Update the timer every second
+        this.currentTimer = setInterval(updateTimer, 1000);
     }
 }
 
